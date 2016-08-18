@@ -1,0 +1,49 @@
+{
+  "name": "github-interface",
+  "version": "1.0.0",
+  "description": "Одностраничное приложение для просмотра issues с выбраного репозитория на Github.",
+  "main": "static/index.html",
+  "scripts": {
+    "test": "mocha setup.js test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilgiznice/github-interface.git"
+  },
+  "keywords": [
+    "react",
+    "redux",
+    "github"
+  ],
+  "author": "Ilgiz Mavlyaviev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ilgiznice/github-interface/issues"
+  },
+  "homepage": "https://github.com/ilgiznice/github-interface#readme",
+  "devDependencies": {
+    "babel-eslint": "^6.1.2",
+    "babel-loader": "^6.2.4",
+    "babel-polyfill": "^6.13.0",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-react": "^6.5.0",
+    "chai": "^3.5.0",
+    "enzyme": "^2.4.1",
+    "eslint": "^3.3.1",
+    "eslint-config-standard": "^5.3.5",
+    "eslint-plugin-promise": "^2.0.1",
+    "eslint-plugin-react": "^6.0.0",
+    "eslint-plugin-standard": "^2.0.0",
+    "jsdom": "^9.4.2",
+    "react-addons-test-utils": "^15.3.0"
+  },
+  "dependencies": {
+    "radium": "^0.18.1",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2",
+    "redux-saga": "^0.11.0",
+    "superagent": "^2.2.0"
+  }
+}
