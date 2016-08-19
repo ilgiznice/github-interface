@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 
-import SEARCH from '../constants'
+import { SEARCH, PAGINATION } from '../constants'
 
 const fields = (state = {}, action) => {
   switch (action.type) {
@@ -31,7 +31,29 @@ const issues = (state = [], action) => {
   }
 }
 
+const paginationDefault = {
+  showPerPage: 5,
+  page: 1
+}
+
+const pagination = (state = paginationDefault, action) => {
+  switch (action.type) {
+    case PAGINATION.SHOW_PER_PAGE:
+      return Object.assign({}, state, {
+        page: 1,
+        showPerPage: action.value
+      })
+    case PAGINATION.CHANGE_PAGE:
+      return Object.assign({}, state, {
+        page: action.page
+      })
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   fields,
-  issues
+  issues,
+  pagination
 })

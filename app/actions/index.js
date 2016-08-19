@@ -1,4 +1,4 @@
-import SEARCH from '../constants'
+import { SEARCH, PAGINATION } from '../constants'
 
 export function updateOwner (value) {
   return {
@@ -31,5 +31,19 @@ export function findIssuesError (error) {
   return {
     type: SEARCH.FIND_ISSUES_SUCCESS,
     error
+  }
+}
+
+export function showPerPage (value) {
+  return {
+    type: PAGINATION.SHOW_PER_PAGE,
+    value
+  }
+}
+
+export function changePage (page) {
+  return {
+    type: PAGINATION.CHANGE_PAGE,
+    page
   }
 }

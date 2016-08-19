@@ -1,7 +1,7 @@
 import { takeEvery } from 'redux-saga'
 import { call, put, fork } from 'redux-saga/effects'
 
-import SEARCH from './constants/'
+import { SEARCH } from './constants/'
 import { findIssuesSuccess, findIssuesError } from './actions/'
 import API from './api/'
 
