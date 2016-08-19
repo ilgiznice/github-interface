@@ -33319,6 +33319,7 @@
 	      _react2.default.createElement(
 	        'thead',
 	        null,
+	        _react2.default.createElement('th', null),
 	        _react2.default.createElement(
 	          'th',
 	          null,
@@ -33333,6 +33334,11 @@
 	          'th',
 	          null,
 	          'Дата открытия'
+	        ),
+	        _react2.default.createElement(
+	          'th',
+	          null,
+	          'Ссылка на GitHub'
 	        )
 	      ),
 	      _react2.default.createElement(
@@ -37464,6 +37470,11 @@
 	    _react2.default.createElement(
 	      'td',
 	      null,
+	      _react2.default.createElement('img', { style: styles.image, src: issue.user.avatar_url })
+	    ),
+	    _react2.default.createElement(
+	      'td',
+	      null,
 	      issue.number
 	    ),
 	    _react2.default.createElement(
@@ -37475,6 +37486,11 @@
 	      'td',
 	      null,
 	      issue.created_at
+	    ),
+	    _react2.default.createElement(
+	      'td',
+	      null,
+	      issue.user.html_url
 	    )
 	  );
 	};
@@ -37486,6 +37502,10 @@
 	var styles = {
 	  container: {
 	    padding: '5px'
+	  },
+	  image: {
+	    width: '100px',
+	    height: '100px'
 	  }
 	};
 

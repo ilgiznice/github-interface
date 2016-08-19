@@ -22,9 +22,11 @@ const List = ({ issues, pages, page, changePage }) => {
     <div>
       <table>
         <thead>
+          <th></th>
           <th>Номер</th>
           <th>Название</th>
           <th>Дата открытия</th>
+          <th>Ссылка на GitHub</th>
         </thead>
         <tbody>
         {issues.map(issue =>
