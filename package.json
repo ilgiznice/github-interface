@@ -2,7 +2,7 @@
   "name": "github-interface",
   "version": "1.0.0",
   "description": "Одностраничное приложение для просмотра issues с выбраного репозитория на Github.",
-  "main": "static/index.html",
+  "main": "serverj.js",
   "scripts": {
     "test": "mocha setup.js test/"
   },
@@ -38,10 +38,13 @@
     "react-addons-test-utils": "^15.3.0"
   },
   "dependencies": {
+    "express": "^4.14.0",
     "radium": "^0.18.1",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
     "react-redux": "^4.4.5",
+    "react-router": "^2.6.1",
+    "react-router-redux": "^4.0.5",
     "redux": "^3.5.2",
     "redux-saga": "^0.11.0",
     "superagent": "^2.2.0"
