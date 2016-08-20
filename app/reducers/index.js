@@ -52,8 +52,23 @@ const pagination = (state = paginationDefault, action) => {
   }
 }
 
+const repos = (state = [], action) => {
+  switch (action.type) {
+    case SEARCH.FIND_REPOS:
+      return state
+    case SEARCH.FIND_REPOS_SUCCESS:
+      return [...action.repos]
+    case SEARCH.FIND_REPOS_ERROR:
+      console.error(action.error)
+      return state
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   fields,
   issues,
-  pagination
+  pagination,
+  repos
 })

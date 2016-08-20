@@ -13,4 +13,21 @@ const fetchIssues = (action) => {
   })
 }
 
-export default fetchIssues
+const fetchRepos = (owner) => {
+  const url = `https://api.github.com/users/${owner}/repos`
+  return new Promise((resolve, reject) => {
+    request(url).end((err, res) => {
+      if (err) {
+        reject(err)
+      } else {
+        const response = JSON.parse(res.text)
+        resolve(response.map(repo => repo.name))
+      }
+    })
+  })
+}
+
+export default {
+  fetchIssues,
+  fetchRepos
+}

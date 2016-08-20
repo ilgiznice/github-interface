@@ -19,14 +19,14 @@ const pagination = (pages, page, changePage) => {
 
 const List = ({ issues, pages, page, changePage }) => {
   return (
-    <div>
+    <div style={styles.block}>
       <table>
         <thead>
-          <th></th>
-          <th>Номер</th>
-          <th>Название</th>
-          <th>Дата открытия</th>
-          <th>Ссылка на GitHub</th>
+          <th style={styles.th.avatar}></th>
+          <th style={styles.th.number}>Номер</th>
+          <th style={styles.th.title}>Название</th>
+          <th style={styles.th.date}>Дата открытия</th>
+          <th style={styles.th.link}>Ссылка на GitHub</th>
         </thead>
         <tbody>
         {issues.map(issue =>
@@ -43,6 +43,10 @@ const List = ({ issues, pages, page, changePage }) => {
 }
 
 const styles = {
+  block: {
+    display: 'inline-block',
+    width: '60%'
+  },
   pagination: {
     padding: '5px',
     display: 'inline-block',
@@ -50,6 +54,23 @@ const styles = {
     cursor: 'pointer',
     active: {
       backgroundColor: 'green'
+    }
+  },
+  th: {
+    avatar: {
+      width: '100px'
+    },
+    number: {
+      width: '50px'
+    },
+    title: {
+      width: '250px'
+    },
+    date: {
+      width: '150px'
+    },
+    link: {
+      width: '200px'
     }
   }
 }

@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react'
+import Radium from 'radium'
 
 const PerPage = ({ showPerPage }) => {
   return (
-    <div>
+    <div style={styles.block}>
       <label>How many issues to show on page</label>
       <select onChange={e => {
         showPerPage(e.target.value)
@@ -15,8 +16,14 @@ const PerPage = ({ showPerPage }) => {
   )
 }
 
+const styles = {
+  block: {
+    float: 'right'
+  }
+}
+
 PerPage.propTypes = {
   showPerPage: PropTypes.func.isRequired
 }
 
-export default PerPage
+export default Radium(PerPage)

@@ -1,12 +1,13 @@
 import { connect } from 'react-redux'
 
-import { updateOwner, updateRepo, findIssues } from '../actions/'
+import { updateOwner, updateRepo, findIssues, findRepos } from '../actions/'
 import SearchForm from '../components/search'
 
 const mapStateToProps = (state) => {
   return {
     owner: state.fields.owner,
-    repo: state.fields.repo
+    repo: state.fields.repo,
+    repos: state.repos
   }
 }
 
@@ -24,6 +25,9 @@ const mapDispatchToProps = (dispatch) => {
         repo
       }
       dispatch(findIssues(data))
+    },
+    findRepos: (owner) => {
+      dispatch(findRepos(owner))
     }
   }
 }

@@ -32966,7 +32966,8 @@
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    owner: state.fields.owner,
-	    repo: state.fields.repo
+	    repo: state.fields.repo,
+	    repos: state.repos
 	  };
 	};
 
@@ -32984,6 +32985,9 @@
 	        repo: repo
 	      };
 	      dispatch((0, _actions.findIssues)(data));
+	    },
+	    findRepos: function findRepos(owner) {
+	      dispatch((0, _actions.findRepos)(owner));
 	    }
 	  };
 	};
@@ -33006,6 +33010,9 @@
 	exports.findIssuesError = findIssuesError;
 	exports.showPerPage = showPerPage;
 	exports.changePage = changePage;
+	exports.findRepos = findRepos;
+	exports.findReposSuccess = findReposSuccess;
+	exports.findReposError = findReposError;
 
 	var _constants = __webpack_require__(510);
 
@@ -33057,6 +33064,26 @@
 	  };
 	}
 
+	function findRepos(data) {
+	  return {
+	    type: _constants.SEARCH.FIND_REPOS,
+	    data: data
+	  };
+	}
+
+	function findReposSuccess(repos) {
+	  return {
+	    type: _constants.SEARCH.FIND_REPOS_SUCCESS,
+	    repos: repos
+	  };
+	}
+	function findReposError(error) {
+	  return {
+	    type: _constants.SEARCH.FIND_ISSUES_ERROR,
+	    error: error
+	  };
+	}
+
 /***/ },
 /* 510 */
 /***/ function(module, exports) {
@@ -33071,7 +33098,10 @@
 	  UPDATE_REPO: 'UPDATE_REPO',
 	  FIND_ISSUES: 'FIND_ISSUES',
 	  FIND_ISSUES_SUCCESS: 'FIND_ISSUES_SUCCESS',
-	  FIND_ISSUES_ERROR: 'FIND_ISSUES_ERROR'
+	  FIND_ISSUES_ERROR: 'FIND_ISSUES_ERROR',
+	  FIND_REPOS: 'FIND_REPOS',
+	  FIND_REPOS_SUCCESS: 'FIND_REPOS_SUCCESS',
+	  FIND_REPOS_ERROR: 'FIND_REPOS_ERROR'
 	};
 
 	var PAGINATION = exports.PAGINATION = {
@@ -33083,7 +33113,7 @@
 /* 511 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -33093,29 +33123,69 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _radium = __webpack_require__(516);
+
+	var _radium2 = _interopRequireDefault(_radium);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var SearchForm = function SearchForm(_ref) {
 	  var owner = _ref.owner;
 	  var repo = _ref.repo;
+	  var repos = _ref.repos;
 	  var updateOwner = _ref.updateOwner;
 	  var updateRepo = _ref.updateRepo;
 	  var findIssues = _ref.findIssues;
+	  var findRepos = _ref.findRepos;
 
 	  return _react2.default.createElement(
-	    "form",
-	    null,
-	    _react2.default.createElement("input", { type: "text", placeholder: "Аккаунт GitHub", onChange: function onChange(e) {
+	    'form',
+	    { style: styles.form },
+	    _react2.default.createElement('input', { style: styles.item, type: 'text', placeholder: 'Аккаунт GitHub', onChange: function onChange(e) {
 	        updateOwner(e.target.value);
-	      } }),
-	    _react2.default.createElement("input", { type: "text", placeholder: "Репозиторий", onChange: function onChange(e) {
+	        findRepos(e.target.value);
+	      }, value: owner }),
+	    _react2.default.createElement('input', { style: styles.item, type: 'text', placeholder: 'Репозиторий', onChange: function onChange(e) {
 	        updateRepo(e.target.value);
-	      } }),
-	    _react2.default.createElement("input", { type: "submit", value: "Найти", onClick: function onClick(e) {
+	      }, value: repo }),
+	    _react2.default.createElement('input', { style: styles.item, type: 'submit', value: 'Найти', onClick: function onClick(e) {
 	        e.preventDefault();
 	        findIssues(owner, repo);
-	      } })
+	      } }),
+	    _react2.default.createElement(
+	      'div',
+	      null,
+	      repos.map(function (repo) {
+	        return _react2.default.createElement(
+	          'div',
+	          {
+	            style: styles.autocomplete,
+	            onClick: function onClick() {
+	              updateRepo(repo);
+	              findIssues(owner, repo);
+	            }
+	          },
+	          repo
+	        );
+	      })
+	    )
 	  );
+	};
+
+	var styles = {
+	  form: {
+	    width: '15%',
+	    float: 'left'
+	  },
+	  item: {
+	    padding: '5px',
+	    margin: '5px'
+	  },
+	  autocomplete: {
+	    padding: '5px',
+	    border: '1px solid black',
+	    cursor: 'pointer'
+	  }
 	};
 
 	SearchForm.propTypes = {
@@ -33126,7 +33196,7 @@
 	  findIssues: _react.PropTypes.func.isRequired
 	};
 
-	exports.default = SearchForm;
+	exports.default = (0, _radium2.default)(SearchForm);
 
 /***/ },
 /* 512 */
@@ -33162,7 +33232,7 @@
 /* 513 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -33172,48 +33242,58 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _radium = __webpack_require__(516);
+
+	var _radium2 = _interopRequireDefault(_radium);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var PerPage = function PerPage(_ref) {
 	  var showPerPage = _ref.showPerPage;
 
 	  return _react2.default.createElement(
-	    "div",
-	    null,
+	    'div',
+	    { style: styles.block },
 	    _react2.default.createElement(
-	      "label",
+	      'label',
 	      null,
-	      "How many issues to show on page"
+	      'How many issues to show on page'
 	    ),
 	    _react2.default.createElement(
-	      "select",
+	      'select',
 	      { onChange: function onChange(e) {
 	          showPerPage(e.target.value);
-	        }, defaultValue: "5" },
+	        }, defaultValue: '5' },
 	      _react2.default.createElement(
-	        "option",
-	        { value: "5" },
-	        "5"
+	        'option',
+	        { value: '5' },
+	        '5'
 	      ),
 	      _react2.default.createElement(
-	        "option",
-	        { value: "10" },
-	        "10"
+	        'option',
+	        { value: '10' },
+	        '10'
 	      ),
 	      _react2.default.createElement(
-	        "option",
-	        { value: "15" },
-	        "15"
+	        'option',
+	        { value: '15' },
+	        '15'
 	      )
 	    )
 	  );
+	};
+
+	var styles = {
+	  block: {
+	    float: 'right'
+	  }
 	};
 
 	PerPage.propTypes = {
 	  showPerPage: _react.PropTypes.func.isRequired
 	};
 
-	exports.default = PerPage;
+	exports.default = (0, _radium2.default)(PerPage);
 
 /***/ },
 /* 514 */
@@ -33312,32 +33392,32 @@
 
 	  return _react2.default.createElement(
 	    'div',
-	    null,
+	    { style: styles.block },
 	    _react2.default.createElement(
 	      'table',
 	      null,
 	      _react2.default.createElement(
 	        'thead',
 	        null,
-	        _react2.default.createElement('th', null),
+	        _react2.default.createElement('th', { style: styles.th.avatar }),
 	        _react2.default.createElement(
 	          'th',
-	          null,
+	          { style: styles.th.number },
 	          'Номер'
 	        ),
 	        _react2.default.createElement(
 	          'th',
-	          null,
+	          { style: styles.th.title },
 	          'Название'
 	        ),
 	        _react2.default.createElement(
 	          'th',
-	          null,
+	          { style: styles.th.date },
 	          'Дата открытия'
 	        ),
 	        _react2.default.createElement(
 	          'th',
-	          null,
+	          { style: styles.th.link },
 	          'Ссылка на GitHub'
 	        )
 	      ),
@@ -33357,6 +33437,10 @@
 	};
 
 	var styles = {
+	  block: {
+	    display: 'inline-block',
+	    width: '60%'
+	  },
 	  pagination: {
 	    padding: '5px',
 	    display: 'inline-block',
@@ -33364,6 +33448,23 @@
 	    cursor: 'pointer',
 	    active: {
 	      backgroundColor: 'green'
+	    }
+	  },
+	  th: {
+	    avatar: {
+	      width: '100px'
+	    },
+	    number: {
+	      width: '50px'
+	    },
+	    title: {
+	      width: '250px'
+	    },
+	    date: {
+	      width: '150px'
+	    },
+	    link: {
+	      width: '200px'
 	    }
 	  }
 	};
@@ -37586,10 +37687,28 @@
 	  }
 	};
 
+	var repos = function repos() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case _constants.SEARCH.FIND_REPOS:
+	      return state;
+	    case _constants.SEARCH.FIND_REPOS_SUCCESS:
+	      return [].concat(_toConsumableArray(action.repos));
+	    case _constants.SEARCH.FIND_REPOS_ERROR:
+	      console.error(action.error);
+	      return state;
+	    default:
+	      return state;
+	  }
+	};
+
 	exports.default = (0, _redux.combineReducers)({
 	  fields: fields,
 	  issues: issues,
-	  pagination: pagination
+	  pagination: pagination,
+	  repos: repos
 	});
 
 /***/ },
@@ -37617,7 +37736,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _marked = [fetchIssues, watchFetchIssues, async].map(regeneratorRuntime.mark);
+	var _marked = [fetchIssues, fetchRepos, watchFetchIssues, watchFetchRepos, async].map(regeneratorRuntime.mark);
 
 	function fetchIssues(action) {
 	  var issues;
@@ -37627,7 +37746,7 @@
 	        case 0:
 	          _context.prev = 0;
 	          _context.next = 3;
-	          return (0, _effects.call)(_api2.default, action.data);
+	          return (0, _effects.call)(_api2.default.fetchIssues, action.data);
 
 	        case 3:
 	          issues = _context.sent;
@@ -37652,35 +37771,83 @@
 	  }, _marked[0], this, [[0, 8]]);
 	}
 
-	function watchFetchIssues() {
-	  return regeneratorRuntime.wrap(function watchFetchIssues$(_context2) {
+	function fetchRepos(action) {
+	  var repos;
+	  return regeneratorRuntime.wrap(function fetchRepos$(_context2) {
 	    while (1) {
 	      switch (_context2.prev = _context2.next) {
 	        case 0:
-	          return _context2.delegateYield((0, _reduxSaga.takeEvery)(_constants.SEARCH.FIND_ISSUES, fetchIssues), 't0', 1);
+	          _context2.prev = 0;
+	          _context2.next = 3;
+	          return (0, _effects.call)(_api2.default.fetchRepos, action.data);
 
-	        case 1:
+	        case 3:
+	          repos = _context2.sent;
+	          _context2.next = 6;
+	          return (0, _effects.put)((0, _actions.findReposSuccess)(repos));
+
+	        case 6:
+	          _context2.next = 12;
+	          break;
+
+	        case 8:
+	          _context2.prev = 8;
+	          _context2.t0 = _context2['catch'](0);
+	          _context2.next = 12;
+	          return (0, _effects.put)((0, _actions.findReposError)(_context2.t0.message));
+
+	        case 12:
 	        case 'end':
 	          return _context2.stop();
 	      }
 	    }
-	  }, _marked[1], this);
+	  }, _marked[1], this, [[0, 8]]);
 	}
 
-	function async() {
-	  return regeneratorRuntime.wrap(function async$(_context3) {
+	function watchFetchIssues() {
+	  return regeneratorRuntime.wrap(function watchFetchIssues$(_context3) {
 	    while (1) {
 	      switch (_context3.prev = _context3.next) {
 	        case 0:
-	          _context3.next = 2;
-	          return [(0, _effects.fork)(watchFetchIssues)];
+	          return _context3.delegateYield((0, _reduxSaga.takeEvery)(_constants.SEARCH.FIND_ISSUES, fetchIssues), 't0', 1);
 
-	        case 2:
+	        case 1:
 	        case 'end':
 	          return _context3.stop();
 	      }
 	    }
 	  }, _marked[2], this);
+	}
+
+	function watchFetchRepos() {
+	  return regeneratorRuntime.wrap(function watchFetchRepos$(_context4) {
+	    while (1) {
+	      switch (_context4.prev = _context4.next) {
+	        case 0:
+	          return _context4.delegateYield((0, _reduxSaga.takeEvery)(_constants.SEARCH.FIND_REPOS, fetchRepos), 't0', 1);
+
+	        case 1:
+	        case 'end':
+	          return _context4.stop();
+	      }
+	    }
+	  }, _marked[3], this);
+	}
+
+	function async() {
+	  return regeneratorRuntime.wrap(function async$(_context5) {
+	    while (1) {
+	      switch (_context5.prev = _context5.next) {
+	        case 0:
+	          _context5.next = 2;
+	          return [(0, _effects.fork)(watchFetchIssues), (0, _effects.fork)(watchFetchRepos)];
+
+	        case 2:
+	        case 'end':
+	          return _context5.stop();
+	      }
+	    }
+	  }, _marked[4], this);
 	}
 
 /***/ },
@@ -37718,7 +37885,26 @@
 	  });
 	};
 
-	exports.default = fetchIssues;
+	var fetchRepos = function fetchRepos(owner) {
+	  var url = 'https://api.github.com/users/' + owner + '/repos';
+	  return new Promise(function (resolve, reject) {
+	    (0, _superagent2.default)(url).end(function (err, res) {
+	      if (err) {
+	        reject(err);
+	      } else {
+	        var response = JSON.parse(res.text);
+	        resolve(response.map(function (repo) {
+	          return repo.name;
+	        }));
+	      }
+	    });
+	  });
+	};
+
+	exports.default = {
+	  fetchIssues: fetchIssues,
+	  fetchRepos: fetchRepos
+	};
 
 /***/ },
 /* 583 */

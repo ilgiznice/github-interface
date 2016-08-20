@@ -47,3 +47,23 @@ export function changePage (page) {
     page
   }
 }
+
+export function findRepos (data) {
+  return {
+    type: SEARCH.FIND_REPOS,
+    data
+  }
+}
+
+export function findReposSuccess (repos) {
+  return {
+    type: SEARCH.FIND_REPOS_SUCCESS,
+    repos
+  }
+}
+export function findReposError (error) {
+  return {
+    type: SEARCH.FIND_ISSUES_ERROR,
+    error
+  }
+}
