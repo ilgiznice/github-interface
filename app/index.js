@@ -3,8 +3,10 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
+import { Router, Route, browserHistory } from 'react-router'
 
-import App from './app'
+import Main from './pages/main'
+import Details from './pages/details'
 import reducers from './reducers/'
 import async from './async'
 
@@ -18,7 +20,10 @@ sagaMiddleware.run(async)
 
 render(
   <Provider store={store}>
-    <App />
+    <Router history={browserHistory}>
+      <Route path="/" component={Main} />
+      <Route path="/issue/:id" component={Details} />
+    </Router>
   </Provider>,
   document.getElementById('app')
 )
